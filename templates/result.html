@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Handwriting Result</title>
+</head>
+<body>
+    <h1 style="text-align: center;">Handwriting Result</h1>
+    <ul>
+        {% for text in handwriting_result %}
+        <li>{{ text }}</li>
+        {% endfor %}
+    </ul>
+    <a href="/">Go back</a>
+</body>
+</html>
