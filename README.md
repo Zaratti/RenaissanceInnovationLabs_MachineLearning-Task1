@@ -8,7 +8,8 @@ This uses the easyOCR model to recognise handwritten text from an uploaded image
 Here is how to test the model and get inferences for your handwritten texts
 
 - Clone the repository
-git clone https://github.com/cyberholic/Hand-Writing-Detection.git cd Hand-Writing-Detection 
+     - git clone [the handWriting repo](https://github.com/Zaratti/RenaissanceInnovationLabs_MachineLearning-Task1.git)
+     - then use _cd handWriting_ to get into the folder
 
 - Set up the environment using Jupyter Notebook
 conda env create -f environment.yml conda activate HWR
