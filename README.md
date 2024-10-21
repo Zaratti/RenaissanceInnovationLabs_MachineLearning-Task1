@@ -1,11 +1,11 @@
 # RenaissanceInnovationLabs_MachineLearning-Task1
-Decoding Scribbles – The Handwriting Recognition Challenge
+Decoding Scribbles – The Handwriting Recognition Challenge.
 
 ## Handwritten Text Recognition
 This model uses the easyOCR library to recognise handwritten text from an uploaded text/image/picture.
 
 ### Setup Instructions
-Here is how to test the model and get inferences for your handwritten texts
+Here is how to test the model and get inferences for your handwritten texts.
 
 - Clone the repository
      - git clone [the handWriting repo](https://github.com/Zaratti/RenaissanceInnovationLabs_MachineLearning-Task1.git)
@@ -22,4 +22,4 @@ Here is how to test the model and get inferences for your handwritten texts
 
 
 ### Usage
-Reading the [White Paper](https://github.com/Zaratti/RenaissanceInnovationLabs_MachineLearning-Task1/blob/main/RIL%20Task%201.ipynb) will inform what is intended and what has been achieved.
+Reading the [White Paper](https://github.com/Zaratti/RenaissanceInnovationLabs_MachineLearning-Task1/blob/main/RIL%20Task%201.ipynb) will inform what was intended and what has been achieved.
