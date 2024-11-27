@@ -15,10 +15,15 @@
             padding: 20px;
         }
 
-        h1 {
+        h1, h2 {
             text-align: center;
             color: #333;
             margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #555;
         }
 
         .container {
@@ -50,19 +55,29 @@
             text-align: center;
             margin-top: 20px;
         }
+
+        video {
+            max-width: 100%;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        canvas {
+            display: none;
+        }
     </style>
 </head>
 
 <body>
-
+    <h1>Handwriting Decoding App</h1>
     <div class="container">
-        <h1>Upload Image or Use Camera</h1>
-
+        <h2>Use Camera or Upload Image</h2>
         <div class="file-input-wrapper">
-            <!-- File input for uploading an image -->
-            <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="uploadImage()">
+            <!-- Button to activate the camera -->
             <button class="btn btn-primary btn-custom" onclick="openCamera()">Open Camera</button>
-
+            <video id="videoElement" autoplay></video>
+            <button class="btn btn-success btn-custom" onclick="capturePhoto()">Capture Photo</button>
+            <canvas id="canvas"></canvas>
             <!-- Error message placeholder -->
             <p id="result"></p>
         </div>
@@ -72,33 +87,72 @@
             <input type="file" name="file" required class="form-control">
             <input type="submit" value="Upload Image" class="btn btn-success btn-custom">
         </form>
-
     </div>
 
     <script>
-        function uploadImage() {
-            const fileInput = document.getElementById('fileInput');
-            const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
-            fetch('/upload', {
+        let videoStream;
+        const videoElement = document.getElementById('videoElement');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Function to open the camera
+        function openCamera() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function (stream) {
+                        videoStream = stream;
+                        videoElement.srcObject = stream;
+                    })
+                    .catch(function (error) {
+                        document.getElementById('result').textContent = "Error: " + error;
+                    });
+            } else {
+                document.getElementById('result').textContent = "Camera not supported.";
+            }
+        }
+
+        // Function to capture the photo from the camera
+        function capturePhoto() {
+            // Get the video frame and draw it on the canvas
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+            // Convert the canvas content to an image
+            canvas.toBlob(function (blob) {
+                const file = new File([blob], 'photo.jpg', { type: 'image/jpeg' });
+
+                // Create a FormData object to send to the server
+                const formData = new FormData();
+                formData.append('file', file);
+
+                // Send the photo to the server via POST request
+                fetch('/upload', {
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.text())
-                .then(html => {
-                    document.open(); // Open and replace the document with the HTML result page
-                    document.write(html);
-                    document.close();
-                })
-                .catch(error => {
-                    document.getElementById('result').textContent = "Error: " + error;
-                });
+                    .then(response => response.text())
+                    .then(html => {
+                        document.open(); // Open and replace the document with the HTML result page
+                        document.write(html);
+                        document.close();
+                    })
+                    .catch(error => {
+                        document.getElementById('result').textContent = "Error: " + error;
+                    });
+                // Stop the camera stream to turn off the camera light
+                stopCamera();
+            });
         }
 
-        function openCamera() {
-            const fileInput = document.getElementById('fileInput');
-            fileInput.click();
+        // Function to stop the camera stream
+        function stopCamera() {
+            if (videoStream) {
+                const tracks = videoStream.getTracks();
+                tracks.forEach(track => track.stop()); // Stop all tracks (video and audio)
+            }
         }
+
     </script>
 
 </body>
